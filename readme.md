@@ -6,63 +6,64 @@ mysql SQL语句自动生成器
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"github.com/gohouse/random"
+
+	"github.com/yxwyxw3038/whysql"
 )
 
 func main() {
-	fmt.Println(random.Rand())
-	fmt.Println(random.Random(12))
-	fmt.Println(random.Random(12,random.T_ALL))
-	fmt.Println(random.RandomBetween(6, 11))
-	fmt.Println(random.RandomBetween(6,11, random.T_ALL))
+	var filterModelList []whysql.FilterModel
+	var temp whysql.FilterModel
+	temp.Action = "like"
+	temp.Column = "Name"
+	temp.DataType = "S"
+	temp.Logic = "and"
+	temp.Value = "yxw"
+	filterModelList = append(filterModelList, temp)
+	b, err := json.Marshal(filterModelList)
+	if err != nil {
+		fmt.Print(err.Error())
+		return
+	}
+	whereStr := string(b)
+	fmt.Print(whereStr)
+	whereSql, err := whysql.GetWhereSqlOrderLimt("User", whereStr, "UpdateTime", whysql.DESC, 10, 1)
+	if err != nil {
+		fmt.Print(err.Error())
+		return
+	}
+	fmt.Println(whereSql)
+
 }
 ```
 输出
-```shell script
-KNgUdYQxeOmZSLDZQAcQOYGGNeeAUa
-yhbsh85wzj3o
-0sllQyYHxm4p
-e0ehi7
-oHrf1S8kB
 ```
 
+```
+[{"column":"Name","action":"like","logic":"and","value":"yxw","dataType":"S"}]
+```
+
+```
+select * from  User  where  1=1  and Name like'%yxw%' Order By UpdateTime DESC  LIMIT 0,10
+```
 ## api说明
-- func Rand() string  
-随机生成6-32位的随机字符串(长度类型皆随机)  
+- func GetWhereSqlOrderLimt(TabName, ParameterStr string, OrderStr string, SortStr string, PageSize, CurrentPage int) (string, error)
+见文思义
 
-- Random(length int, fill ...RandType) string  
-随机生成指定长度的随机字符串(类型可选或随机)  
+- GetWhereSqlLimt(TabName, ParameterStr string, PageSize, CurrentPage int) (string, error)  
+见文思义  
 
-- RandomBetween(min, max int, fill ...RandType) string  
-随机生成指定长度区间的随机字符串(类型可选或随机)
+- GetWhereSqlCount(TabName, ParameterStr string) (string, error) 
+见文思义
 
-
+- GetWhereSql(ParameterStr string) (string, error) 
+见文思义
 ## 字符组成
 ```go
-// RandType ...
-type RandType int
-
 const (
-	// 大写字母
-	T_CAPITAL RandType = iota + 1
-	// 小写字母
-	T_LOWERCASE
-	// 数字
-	NUMBERIC
-	// 小写字母+数字
-	T_LOWERCASE_NUMBERIC
-	// 大写字母+数字
-	T_CAPITAL_NUMBERIC
-	// 大写字母+小写字母
-	T_CAPITAL_LOWERCASE
-	// 数字+字母
-	T_ALL
+	ASC  = "ASC"
+	DESC = "DESC"
 )
 ```
-字符串
-```go
-StrNumberic  = `0123456789`
-StrLowercase = `abcdefghijklmnopqrstuvwxyz`
-StrCapital   = `ABCDEFGHIJKLMNOPQRSTUVWXYZ`
-```
+
