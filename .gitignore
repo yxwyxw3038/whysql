@@ -1,0 +1,9 @@
+*.log
+*.exe
+*.temp
+log/*
+coverage.out
+count.out
+test
+profile.out
+tmp.out
