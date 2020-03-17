@@ -15,6 +15,11 @@ type FilterModel struct {
 	DataType string `json:"dataType"` //数据类型
 }
 
+const (
+	ASC  = "ASC"
+	DESC = "DESC"
+)
+
 func GetWhereSqlOrderLimt(TabName, ParameterStr string, OrderStr string, SortStr string, PageSize, CurrentPage int) (string, error) {
 
 	whereSql, err := GetWhereSql(ParameterStr)
