@@ -1,4 +1,4 @@
-## random
+## whysql
 mysql SQL语句自动生成器
 
 ## 用例
@@ -40,26 +40,34 @@ func main() {
 输出
 ```
 
-```
+```json
 [{"column":"Name","action":"like","logic":"and","value":"yxw","dataType":"S"}]
 ```
 
-```
+```sql
 select * from  User  where  1=1  and Name like'%yxw%' Order By UpdateTime DESC  LIMIT 0,10
 ```
+
 ## api说明
-- func GetWhereSqlOrderLimt(TabName, ParameterStr string, OrderStr string, SortStr string, PageSize, CurrentPage int) (string, error)
-见文思义
 
-- GetWhereSqlLimt(TabName, ParameterStr string, PageSize, CurrentPage int) (string, error)  
+```go
+func GetWhereSqlOrderLimt(TabName, ParameterStr string, OrderStr string, SortStr string, PageSize, CurrentPage int) (string, error)
+```
+见文思义
+```go
+func GetWhereSqlLimt(TabName, ParameterStr string, PageSize, CurrentPage int) (string, error)  
+```
 见文思义  
-
-- GetWhereSqlCount(TabName, ParameterStr string) (string, error) 
+```go
+func GetWhereSqlCount(TabName, ParameterStr string) (string, error) 
+```
+见文思义
+```go
+func GetWhereSql(ParameterStr string) (string, error) 
+```
 见文思义
 
-- GetWhereSql(ParameterStr string) (string, error) 
-见文思义
-## 字符组成
+
 ```go
 const (
 	ASC  = "ASC"
