@@ -232,7 +232,7 @@ func (m *WhyInfo) GetQuerySql() (string, error) {
 	}
 	tempStr = "select * from " + (*m).TabName + (*m).Str
 	(*m).Reset()
-	return tempStr, nil
+	return tempStr, err
 
 }
 func (m *WhyInfo) GetCountSql() (string, error) {
@@ -254,5 +254,5 @@ func (m *WhyInfo) GetCountSql() (string, error) {
 	}
 	tempStr = "select count(1) as Num from " + (*m).TabName + (*m).Str
 	(*m).Reset()
-	return tempStr, nil
+	return tempStr, err
 }
