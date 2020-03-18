@@ -78,7 +78,7 @@ func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
 			temp1 = DefaultPageSize
 		}
 		(*m).CurrentPage = temp
-		(*m).PageSize = temp1 - temp
+		(*m).PageSize = temp1 - temp + 1
 	}
 	(*m).IsLimt = true
 	return m
@@ -106,7 +106,7 @@ func (m *WhyInfo) getLimt() {
 func (m *WhyInfo) getLimtStr() {
 	tempStr := ""
 	(*m).getLimt()
-	if (*m).Limt != (LimtModel{}) {
+	if (*m).Limt != (LimtModel{}) && (*m).IsLimt {
 		tempStr = " " + strconv.Itoa((*m).Limt.Min) + "," + strconv.Itoa((*m).Limt.Max) + " "
 	}
 	(*m).LimtStr = tempStr
@@ -181,7 +181,7 @@ func (m *WhyInfo) getWhereInit() error {
 	}
 
 	if (*m).OrderByStr != "" {
-		tempStr = tempStr + " OrderBy " + (*m).LimtStr
+		tempStr = tempStr + " OrderBy " + (*m).OrderByStr
 	}
 	(*m).Str = tempStr
 	return err
