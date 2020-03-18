@@ -68,11 +68,11 @@ select * from  User  where  1=1  and AccountName like'%yxw%' Order By UpdateTime
 ```
 
 ```sql
-select * from User where 1=1  and AccountName like'%yxw%' OrderBy  ID DESC  LIMIT  0,20 
+select * from User where 1=1  and AccountName like'%yxw%' Order By  ID DESC  LIMIT  0,20 
 ```
 
 ```sql
-select * from User where 1=1  and AccountName like'%yxw%' OrderBy  ID DESC ,  AccountName DESC  LIMIT  0,20
+select * from User where 1=1  and AccountName like'%yxw%' Order By  ID DESC ,  AccountName DESC  LIMIT  0,20
 ```
 ## api说明
 
