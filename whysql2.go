@@ -30,6 +30,7 @@ func (m *WhyInfo) Reset() *WhyInfo {
 	(*m).TabName = ""
 	(*m).CurrentPage = DefaultCurrentPage
 	(*m).PageSize = DefaultPageSize
+	(*m).IsLimt = false
 	return m
 }
 func (m *WhyInfo) Clear() *WhyInfo {
@@ -40,11 +41,20 @@ func (m *WhyInfo) SetTabName(tabName string) *WhyInfo {
 	return m
 }
 func (m *WhyInfo) SetPageSize(pageSize int) *WhyInfo {
+
+	if pageSize <= 0 {
+		pageSize = DefaultCurrentPage
+	}
 	(*m).PageSize = pageSize
+	(*m).IsLimt = true
 	return m
 }
 func (m *WhyInfo) SetCurrentPage(currentPage int) *WhyInfo {
+	if currentPage <= 0 {
+		currentPage = DefaultPageSize
+	}
 	(*m).CurrentPage = currentPage
+	(*m).IsLimt = true
 	return m
 }
 func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
@@ -52,12 +62,25 @@ func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
 		(*m).CurrentPage = DefaultCurrentPage
 		(*m).PageSize = DefaultPageSize
 	} else if len(args) == 1 {
-		(*m).CurrentPage = args[0]
+		temp := args[0]
+		if temp <= 0 {
+			temp = DefaultCurrentPage
+		}
+		(*m).CurrentPage = temp
 		(*m).PageSize = DefaultPageSize
 	} else if len(args) > 1 {
-		(*m).CurrentPage = args[0]
-		(*m).PageSize = args[1] - args[0]
+		temp := args[0]
+		if temp <= 0 {
+			temp = DefaultCurrentPage
+		}
+		temp1 := args[1]
+		if temp1 <= 0 {
+			temp1 = DefaultPageSize
+		}
+		(*m).CurrentPage = temp
+		(*m).PageSize = temp1 - temp
 	}
+	(*m).IsLimt = true
 	return m
 }
 

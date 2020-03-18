@@ -24,6 +24,7 @@ type WhyInfo struct {
 	PageSize     int
 	CurrentPage  int
 	LimtStr      string
+	IsLimt       bool
 	OrderByStr   string
 	WhereStr     string
 	Str          string
