@@ -17,9 +17,13 @@ func NewWhy(ParameterStr string) (*WhyInfo, error) {
 	}()
 	var filterModelList []FilterModel
 	m := new(WhyInfo)
-	err = json.Unmarshal([]byte(ParameterStr), &filterModelList)
-	if err != nil {
-		return nil, err
+	if ParameterStr == "" || ParameterStr == "[]" {
+
+	} else {
+		err = json.Unmarshal([]byte(ParameterStr), &filterModelList)
+		if err != nil {
+			return nil, err
+		}
 	}
 	(*m).ColumnList = filterModelList
 	return m.Reset(), err
