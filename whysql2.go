@@ -197,7 +197,7 @@ func (m *WhyInfo) getWhereInit() error {
 	}
 
 	if (*m).OrderByStr != "" {
-		tempStr = tempStr + " OrderBy " + (*m).OrderByStr
+		tempStr = tempStr + " Order By " + (*m).OrderByStr
 	}
 
 	if (*m).LimtStr != "" {
@@ -231,6 +231,7 @@ func (m *WhyInfo) GetQuerySql() (string, error) {
 		return "", err
 	}
 	tempStr = "select * from " + (*m).TabName + (*m).Str
+	(*m).Reset()
 	return tempStr, nil
 
 }
@@ -252,5 +253,6 @@ func (m *WhyInfo) GetCountSql() (string, error) {
 		return "", err
 	}
 	tempStr = "select count(1) as Num from " + (*m).TabName + (*m).Str
+	(*m).Reset()
 	return tempStr, nil
 }
