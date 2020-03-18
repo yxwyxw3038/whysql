@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"strconv"
+	"strings"
 )
 
 func NewWhy(ParameterStr string) (*WhyInfo, error) {
@@ -83,8 +84,25 @@ func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
 	(*m).IsLimt = true
 	return m
 }
+func (m *WhyInfo) SetOrderBy(rlist ...string) *WhyInfo {
+	tlist := make([]OrderByModel, 0)
+	if len(rlist) <= 0 {
+		return m
+	} else if len(rlist) == 1 {
+		tlist = append(tlist, OrderByModel{Column: rlist[0], SortType: DESC})
+	} else {
+		if strings.ToUpper(rlist[len(rlist)-1]) != DESC && strings.ToUpper(rlist[len(rlist)-1]) != ASC {
+			rlist = append(rlist, DESC)
+		}
+		for i := 0; i < len(rlist)-2; i++ {
+			tlist = append(tlist, OrderByModel{Column: rlist[i], SortType: rlist[len(rlist)-1]})
+		}
+	}
 
-func (m *WhyInfo) SetOrderBy(rlist ...OrderByModel) *WhyInfo {
+	(*m).OrderByList = tlist
+	return m
+}
+func (m *WhyInfo) SetOrderByCustomize(rlist ...OrderByModel) *WhyInfo {
 	tlist := make([]OrderByModel, 0)
 	for _, val := range rlist {
 		tlist = append(tlist, val)
@@ -167,8 +185,9 @@ func (m *WhyInfo) getWhereInit() error {
 			err = errors.New("生成WHERER条件异常")
 		}
 	}()
-	(*m).getLimtStr()
+
 	(*m).getOrderByStr()
+	(*m).getLimtStr()
 	err = (*m).getWhereSqlStr()
 	if err != nil {
 		return err
@@ -176,12 +195,13 @@ func (m *WhyInfo) getWhereInit() error {
 	if (*m).WhereStr != "" {
 		tempStr = " where " + (*m).WhereStr
 	}
-	if (*m).LimtStr != "" {
-		tempStr = tempStr + " LIMIT " + (*m).LimtStr
-	}
 
 	if (*m).OrderByStr != "" {
 		tempStr = tempStr + " OrderBy " + (*m).OrderByStr
+	}
+
+	if (*m).LimtStr != "" {
+		tempStr = tempStr + " LIMIT " + (*m).LimtStr
 	}
 	(*m).Str = tempStr
 	return err
