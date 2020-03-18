@@ -94,7 +94,7 @@ func (m *WhyInfo) SetOrderBy(rlist ...string) *WhyInfo {
 		if strings.ToUpper(rlist[len(rlist)-1]) != DESC && strings.ToUpper(rlist[len(rlist)-1]) != ASC {
 			rlist = append(rlist, DESC)
 		}
-		for i := 0; i < len(rlist)-2; i++ {
+		for i := 0; i < len(rlist)-1; i++ {
 			tlist = append(tlist, OrderByModel{Column: rlist[i], SortType: rlist[len(rlist)-1]})
 		}
 	}
