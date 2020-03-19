@@ -83,7 +83,7 @@ func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
 			temp1 = DefaultPageSize
 		}
 		(*m).CurrentPage = temp
-		(*m).PageSize = temp1 - temp + 1
+		(*m).PageSize = temp1
 	}
 	(*m).IsLimt = true
 	return m
@@ -118,6 +118,9 @@ func (m *WhyInfo) getLimt() {
 	PageSize := (*m).PageSize
 	CurrentPage := (*m).CurrentPage
 	min := (CurrentPage - 1) * PageSize
+	if min != 0 {
+		min++
+	}
 	max := CurrentPage * PageSize
 	var temp LimtModel
 	temp.Min = min
