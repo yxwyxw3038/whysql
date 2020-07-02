@@ -14,7 +14,7 @@ func GetWhereSqlOrderLimt(TabName, ParameterStr string, OrderStr string, SortStr
 		return "", err
 	}
 
-	whereSql = "select * from  " + TabName + "  where " + whereSql + " Order By " + OrderStr + " " + SortStr + "  LIMIT " + strconv.Itoa((CurrentPage-1)*PageSize) + "," + strconv.Itoa(CurrentPage*PageSize)
+	whereSql = "select * from  " + TabName + "  where " + whereSql + " Order By " + OrderStr + " " + SortStr + "  LIMIT " + strconv.Itoa((CurrentPage-1)*PageSize) + "," + strconv.Itoa(PageSize)
 	return whereSql, nil
 }
 func GetWhereSqlLimt(TabName, ParameterStr string, PageSize, CurrentPage int) (string, error) {
@@ -24,7 +24,7 @@ func GetWhereSqlLimt(TabName, ParameterStr string, PageSize, CurrentPage int) (s
 		return "", err
 	}
 
-	whereSql = "select * from  " + TabName + "  where " + whereSql + "  LIMIT " + strconv.Itoa((CurrentPage-1)*PageSize) + "," + strconv.Itoa(CurrentPage*PageSize)
+	whereSql = "select * from  " + TabName + "  where " + whereSql + "  LIMIT " + strconv.Itoa((CurrentPage-1)*PageSize) + "," + strconv.Itoa(PageSize)
 	return whereSql, nil
 }
 func GetWhereSqlCount(TabName, ParameterStr string) (string, error) {
