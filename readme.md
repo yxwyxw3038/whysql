@@ -1,5 +1,5 @@
 ## whysql
-mysql SQL语句自动生成器
+mysql SQL语句自动生成器,用于解决前端后端反复调整查询接口问题，通过约定格式的JSON，仅需前端单独调整传入JSON即可以动态查询相应数据
 
 ## 用例
 ```go
@@ -61,6 +61,7 @@ func main() {
 
 ```json
 [{"column":"AccountName","action":"like","logic":"and","value":"yxw","dataType":"S"}]
+
 ```
 
 ```sql
