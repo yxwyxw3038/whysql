@@ -26,8 +26,25 @@ func NewWhy(ParameterStr string) (*WhyInfo, error) {
 		}
 	}
 	(*m).ColumnList = filterModelList
+	var baseOrderBy []OrderByModel
+	for i := 0; i < len((*m).ColumnList); i++ {
+		temp := (*m).ColumnList[i].OrderByType
+		if temp != "" {
+
+			if strings.ToUpper(temp) == DESC || temp[0:1] == "D" || temp[0:1] == "d" {
+				baseOrderBy = append(baseOrderBy, OrderByModel{Column: (*m).ColumnList[i].Column, SortType: DESC})
+			}
+
+			if strings.ToUpper(temp) == ASC || temp[0:1] == "A" || temp[0:1] == "a" {
+				baseOrderBy = append(baseOrderBy, OrderByModel{Column: (*m).ColumnList[i].Column, SortType: ASC})
+			}
+		}
+
+	}
+	(*m).BaseOrderByList = baseOrderBy
 	return m.Reset(), err
 }
+
 func (m *WhyInfo) Reset() *WhyInfo {
 	(*m).ParameterStr = ""
 	(*m).Limt = *new(LimtModel)
@@ -90,19 +107,40 @@ func (m *WhyInfo) SetLimt(args ...int) *WhyInfo {
 }
 func (m *WhyInfo) SetOrderBy(rlist ...string) *WhyInfo {
 	tlist := make([]OrderByModel, 0)
+	//兼容多次OrderBy
+	tlist = append(tlist, (*m).OrderByList...)
 	if len(rlist) <= 0 {
-		return m
+
 	} else if len(rlist) == 1 {
 		tlist = append(tlist, OrderByModel{Column: rlist[0], SortType: DESC})
 	} else {
+		//补尾差
 		if strings.ToUpper(rlist[len(rlist)-1]) != DESC && strings.ToUpper(rlist[len(rlist)-1]) != ASC {
 			rlist = append(rlist, DESC)
 		}
 		for i := 0; i < len(rlist)-1; i++ {
+
 			tlist = append(tlist, OrderByModel{Column: rlist[i], SortType: rlist[len(rlist)-1]})
 		}
 	}
+	//倒腾基础排序数据添加
+	//找到就不重复添加了
+	// if len((*m).BaseOrderByList) > 0 {
+	// 	for i := 0; i < len((*m).BaseOrderByList); i++ {
+	// 		bj := false
+	// 		for j := 0; j < len(tlist); j++ {
+	// 			if (*m).BaseOrderByList[i] == tlist[j] {
+	// 				bj = true
+	// 				break
+	// 			}
 
+	// 		}
+	// 		if !bj {
+	// 			tlist = append(tlist, (*m).BaseOrderByList[i])
+	// 		}
+	// 	}
+
+	// }
 	(*m).OrderByList = tlist
 	return m
 }
@@ -138,17 +176,54 @@ func (m *WhyInfo) getLimtStr() {
 }
 func (m *WhyInfo) getOrderByStr() {
 	tempStr := ""
-	if (*m).OrderByList == nil || len((*m).OrderByList) <= 0 {
+	var tlist []OrderByModel
+
+	if len((*m).OrderByList) > 0 {
+		for i := 0; i < len((*m).OrderByList); i++ {
+			bj := false
+			for j := 0; j < len(tlist); j++ {
+				if (*m).OrderByList[i] == tlist[j] {
+					bj = true
+					break
+				}
+
+			}
+			if !bj {
+				tlist = append(tlist, (*m).OrderByList[i])
+			}
+		}
+
+	}
+
+	if len((*m).BaseOrderByList) > 0 {
+		for i := 0; i < len((*m).BaseOrderByList); i++ {
+			bj := false
+			for j := 0; j < len(tlist); j++ {
+				if (*m).BaseOrderByList[i] == tlist[j] {
+					bj = true
+					break
+				}
+
+			}
+			if !bj {
+				tlist = append(tlist, (*m).BaseOrderByList[i])
+			}
+		}
+
+	}
+
+	if tlist == nil || len(tlist) <= 0 {
 
 	} else {
-		for i, val := range (*m).OrderByList {
+
+		for j, val := range tlist {
 			if val != (OrderByModel{}) {
 				SortType := "Desc"
 				if val.SortType != "" {
 					SortType = val.SortType
 				}
 				tempStr = tempStr + " " + val.Column + " " + SortType + " "
-				if len((*m).OrderByList) != (i + 1) {
+				if len(tlist) != (j + 1) {
 					tempStr = tempStr + ", "
 				}
 			}
