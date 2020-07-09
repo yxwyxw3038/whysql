@@ -170,7 +170,7 @@ func (m *WhyInfo) getLimtStr() {
 	tempStr := ""
 	(*m).getLimt()
 	if (*m).Limt != (LimtModel{}) && (*m).IsLimt {
-		tempStr = " " + strconv.Itoa((*m).Limt.Min) + "," + strconv.Itoa((*m).Limt.Max) + " "
+		tempStr = " " + strconv.Itoa((*m).Limt.Min) + "," + strconv.Itoa((*m).PageSize) + " "
 	}
 	(*m).LimtStr = tempStr
 }
